@@ -12,6 +12,8 @@ class MessageSend:
         self.register("weCom_webhook", self.weCom_bot)
         self.register("bark_deviceKey", self.bark)
         self.register("feishu_deviceKey", self.feishu)
+        self.bark_private_url = None
+
 
     def register(self, token_name, callback):
         assert token_name not in self.sender, "Register fails, the token name exists."
@@ -29,6 +31,7 @@ class MessageSend:
 
         for token_key in message_tokens:
             token_value = message_tokens[token_key]
+            self.bark_private_url = message_tokens["bark_private_url"]
             if token_key in self.sender and check_valid_token(token_value):
                 try:
                     ret = self.sender[token_key](token_value, title, content)
@@ -143,6 +146,9 @@ class MessageSend:
         assert type(device_key) == str, "Wrong type for bark token."
 
         url = "https://api.day.app/push"
+        if self.bark_private_url != None:
+            url = self.bark_private_url
+        
         headers = {
             "content-type": "application/json",
             "charset": "utf-8"

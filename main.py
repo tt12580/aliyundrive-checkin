@@ -3,20 +3,23 @@ import re
 import argparse
 from aliyundrive import Aliyundrive
 from message_send import MessageSend
+import configparser
 
 
 def main():
-    parser = argparse.ArgumentParser()
-    parser.add_argument('--token_string', type=str, required=True)
-    args = parser.parse_args()
+    # 创建一个 ConfigParser 对象
+    config = configparser.ConfigParser()
+    # 读取配置文件
+    config.read('config.ini')
 
-    token_string = args.token_string
-    pushplus_token = os.environ.get('PUSHPLUS_TOKEN')
-    serverChan_sendkey = os.environ.get('SERVERCHAN_SENDKEY')
-    weCom_tokens = os.environ.get('WECOM_TOKENS')
-    weCom_webhook = os.environ.get('WECOM_WEBHOOK')
-    bark_deviceKey = os.environ.get('BARK_DEVICEKEY')
-    feishu_deviceKey = os.environ.get('FEISHU_DEVICEKEY')
+    token_string = config.get("Token", "REFRESH_TOKEN_LIST")
+    pushplus_token = config.get("Token", "PUSHPLUS_TOKEN")
+    serverChan_sendkey = config.get("Token", "SCKEY")
+    weCom_tokens = config.get("Token", "WECOM_TOKENS")
+    weCom_webhook = config.get("Token", "WECOM_WEBHOOK")
+    bark_deviceKey = config.get("Token", "BARK_DEVICEKEY")
+    feishu_deviceKey = config.get("Token", "FEISHU_DEVICEKEY")
+    bark_private_url = config.get("Token", "BARK_PRIVATE_URL")
 
     message_tokens = {
         'pushplus_token': pushplus_token,
@@ -25,6 +28,7 @@ def main():
         'weCom_webhook': weCom_webhook,
         'bark_deviceKey': bark_deviceKey,
         'feishu_deviceKey': feishu_deviceKey,
+        'bark_private_url': bark_private_url
     }
 
     token_string = token_string.split(',')
