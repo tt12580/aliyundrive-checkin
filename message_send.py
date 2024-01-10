@@ -150,7 +150,8 @@ class MessageSend:
         data = {
             "title": title,
             "body": content,
-            "device_key": device_key
+            "device_key": device_key,
+            "group": "阿里云盘"
         }
 
         resp = requests.post(url, headers=headers, data=json.dumps(data))
